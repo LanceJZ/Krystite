@@ -1,0 +1,15 @@
+Base path: C:/Program Files/Unity/Editor/Data
+Pipe name: \\.\pipe\UnityShaderCompiler-64bit-1-7752
+Cmd: getPlatforms
+Cmd: compileSnippet
+  api=0 type=0 insize=530 outsize=3063 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=530 outsize=3063 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=530 outsize=3287 kw=_EMISSION ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=530 outsize=3287 kw=_EMISSION ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=530 outsize=3339 kw=_EMISSION _METALLICGLOSSMAP ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=530 outsize=3339 kw=_EMISSION _METALLICGLOSSMAP ok=1
