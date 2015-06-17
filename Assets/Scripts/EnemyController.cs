@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
 
     private void Awake()
     {
-        spawnDelay = 30;
+        spawnDelay = 45;
     }
 
     private void Start()

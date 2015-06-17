@@ -33,14 +33,14 @@ public class Player : MonoBehaviour
     private float timer;
     private float shotTimer;
     private float arrowTimer;
-    private int lifePoints;
+    private int health;
     private int shotNumber;
     private int krystiteAmout;
 
     // Use this for initialization when scene loads.
     private void Awake()
     {
-        lifePoints = 100;
+        health = 100;
         shotDelay = 0.25f;
         maxSpeed = 15f;
         thrustAmount = 4.725f;
@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
         spawn = Instantiate(borderX);
         borderXLeftTransform = spawn.GetComponent<Transform>();
 
-        score.PlayerHit(-100);
+        score.PlayerHasHealth(100);
     }
 
     // Use this for initialization when game starts.
@@ -112,7 +112,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            if (krystiteAmout >= 4)
+            if (krystiteAmout >= 1)
             {
                 GameObject thisShotObj = Instantiate(superShot);
                 thisShotObj.GetComponentInChildren<AudioSource>().volume = 0.1f;
@@ -122,8 +122,23 @@ public class Player : MonoBehaviour
                 Vector3 gun = gameObject.transform.GetChild(1).transform.position;
                 thisShotObj.GetComponentInChildren<Shot>().SetUp(gun, GetComponent<Rigidbody>().velocity, transform.rotation, this, 5.25f);
                 thisShotObj.GetComponentInChildren<Shot>().shotSpeed = 100;
-                krystiteAmout -= 4;
-                score.PlayerUsed(4);
+                krystiteAmout -= 1;
+                score.PlayerHasKrystite(krystiteAmout);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (krystiteAmout >= 5)
+            {
+                krystiteAmout -= 5;
+                health += 50;
+
+                if (health > 100)
+                    health = 100;
+
+                score.PlayerHasKrystite(krystiteAmout);
+                score.PlayerHasHealth(health);
             }
         }
 
@@ -140,10 +155,10 @@ public class Player : MonoBehaviour
             {
                 for (int i = 0; i < bosses.Length - 1; i++)
                 {
-                    if (Vector3.Distance(transform.position, bosses[i].GetComponent<Transform>().position) <
-                        Vector3.Distance(transform.position, bosses[i + 1].GetComponent<Transform>().position))
+                    if (Vector3.Distance(transform.position, bosses[i + 1].GetComponent<Transform>().position) <
+                        Vector3.Distance(transform.position, bosses[closest].GetComponent<Transform>().position))
                     {
-                        closest = i;
+                        closest = i + 1;
                     }
                 }
             }
@@ -168,10 +183,10 @@ public class Player : MonoBehaviour
             {
                 for (int i = 0; i < miners.Length - 1; i++)
                 {
-                    if (Vector3.Distance(transform.position, miners[i].GetComponent<Transform>().position) <
-                        Vector3.Distance(transform.position, miners[i + 1].GetComponent<Transform>().position))
+                    if (Vector3.Distance(transform.position, miners[i + 1].GetComponent<Transform>().position) <
+                        Vector3.Distance(transform.position, miners[closest].GetComponent<Transform>().position))
                     {
-                        closest = i;
+                        closest = i + 1;
                     }
                 }
             }
@@ -272,8 +287,9 @@ public class Player : MonoBehaviour
 
         if (other.tag == "Krystite")
         {
-            score.PlayerCollected(1);
             krystiteAmout++;
+            score.PlayerCollectedKrystite();
+            score.PlayerHasKrystite(krystiteAmout);
             other.GetComponent<Krystite>().Destroy();
         }
 
@@ -291,10 +307,10 @@ public class Player : MonoBehaviour
 
     private void ShipHit(int points)
     {
-        if (lifePoints > points)
+        if (health > points)
         {
-            lifePoints -= points;
-            score.PlayerHit(points);
+            health -= points;
+            score.PlayerHasHealth(health);
         }
         else
         {

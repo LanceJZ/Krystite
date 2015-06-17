@@ -95,7 +95,7 @@ public class EnemyBoss : MonoBehaviour
     {
         if (other.tag == "PlayerSuperShot")
         {
-            health -= 50;
+            health -= 25;
 
             if (health <= 0)
             {

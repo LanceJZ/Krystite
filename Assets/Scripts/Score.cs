@@ -49,7 +49,8 @@ public class Score : MonoBehaviour
     private void UpdateScore()
     {
         Text scroeText = gameObject.GetComponent<Text>();
-        scroeText.text = "Score: " + score + " HP: " + playerHitPoints + " Krystite: " + playerKrystite + "   Arrow keys to move and rotate, Left CTRL to Mine, Left Alt to Fire.";
+        scroeText.text = " Arrow keys to move and rotate, Left CTRL to Mine, Left Alt to Fire. DownArrow to heal. \n" +
+            "Score: " + score + " HP: " + playerHitPoints + " Krystite: " + playerKrystite;
     }
 
     public void AddScore(int Points)
@@ -62,21 +63,21 @@ public class Score : MonoBehaviour
             highScore = score;
     }
 
-    public void PlayerHit(int Points)
+    public void PlayerCollectedKrystite()
     {
-        playerHitPoints -= Points;
-        UpdateScore();
-    }
-
-    public void PlayerCollected(int Amount)
-    {
-        playerKrystite += Amount;
         score += 10;
         UpdateScore();
     }
 
-    public void PlayerUsed(int Amount)
+    public void PlayerHasKrystite(int Amount)
     {
-        playerKrystite -= Amount;
+        playerKrystite = Amount;
+        UpdateScore();
+    }
+
+    public void PlayerHasHealth(int Amount)
+    {
+        playerHitPoints = Amount;
+        UpdateScore();
     }
 }

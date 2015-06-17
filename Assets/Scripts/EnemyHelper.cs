@@ -14,12 +14,14 @@ public class EnemyHelper : MonoBehaviour
     public Vector3 spawnPosition;
     public Vector2 target;
     public float angle;
+    public int krystite;
     public bool moveToTarget;
     public bool getKrystite;
     public bool mineRock;
     public bool attackPlayer;
     public bool outOfRange;
     public bool krystiteFull;
+    public bool findRock;
 
     private EnemyKrystiteDetect krystiteDetect; // Enemy Rock Detect sets this.
     private EnemyRockDetect rockDetect;
@@ -36,8 +38,7 @@ public class EnemyHelper : MonoBehaviour
     private float maxSpeed;
     private float mineTimer;
     private int points;
-    public int krystite;
-    private bool findRock;
+    private int health;
 
     // Use this for initialization when scene loads.
     private void Awake()
@@ -65,8 +66,9 @@ public class EnemyHelper : MonoBehaviour
     // Use this for initialization when game starts.
     private void Start()
     {
-        Setup(100);
+        Setup(50);
         points = 50;
+        health = 100;
     }
 
     // Update is called once per frame.
@@ -219,7 +221,7 @@ public class EnemyHelper : MonoBehaviour
                 outOfRange = false;
             }
 
-            if (krystite >= 5)
+            if (krystite >= 10)
             {
                 krystiteFull = true;
                 ClosestBossBuilder();
@@ -231,25 +233,30 @@ public class EnemyHelper : MonoBehaviour
 
         if (other.tag == "PlayerSuperShot")
         {
-            if (krystiteDetect != null)
-                krystiteDetect.Destroy();
+            health -= 50;
 
-            if (rockDetect != null)
-                rockDetect.Destroy();
-
-            if (playerDetect != null)
-                playerDetect.Destroy();
-
-            score.AddScore(points);
-            Instantiate(explodeFX, transform.position, Quaternion.identity);
-
-            for (int i = 0; i < krystite; i++)
+            if (health <= 0)
             {
-                GameObject spawn = Instantiate(krystiteObj); //Have the Krystite go the direction of the shot.
-                spawn.GetComponent<Krystite>().Setup(transform.position, other.GetComponent<Rigidbody>().velocity * 5);
-            }
+                if (krystiteDetect != null)
+                    krystiteDetect.Destroy();
 
-            Destroy(gameObject.transform.parent.gameObject);
+                if (rockDetect != null)
+                    rockDetect.Destroy();
+
+                if (playerDetect != null)
+                    playerDetect.Destroy();
+
+                score.AddScore(points);
+                Instantiate(explodeFX, transform.position, Quaternion.identity);
+
+                for (int i = 0; i < krystite; i++)
+                {
+                    GameObject spawn = Instantiate(krystiteObj); //Have the Krystite go the direction of the shot.
+                    spawn.GetComponent<Krystite>().Setup(transform.position, other.GetComponent<Rigidbody>().velocity * 5);
+                }
+
+                Destroy(gameObject.transform.parent.gameObject);
+            }
         }
 
         if (other.tag == "BossBuilder")

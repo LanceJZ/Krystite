@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class EnemyBossBuilder : MonoBehaviour
 {
@@ -11,14 +11,14 @@ public class EnemyBossBuilder : MonoBehaviour
     private CheckBounds checkBounds;
 
     // Use this for initialization when scene loads.
-    void Awake()
+    private void Awake()
     {
         checkBounds = new CheckBounds(GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(),
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>(), 51);
     }
 
     // Use this for initialization when game starts.
-    void Start()
+    private void Start()
     {
         // random location
         if (Random.Range(0, 10) > 5)
@@ -30,28 +30,28 @@ public class EnemyBossBuilder : MonoBehaviour
     }
 
     // Update is called once per frame.
-    void Update()
+    private void Update()
     {
-        if (krystite >= 10)
+        if (krystite >= 20)
         {
             Instantiate(BossObj, transform.position, transform.rotation);
 
-            krystite -= 10;
+            krystite -= 20;
         }
     }
 
     // Update is called by physics.
-    void FixedUpdate()
+    private void FixedUpdate()
     {
     }
 
     // When Collider is triggered by other.
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
     }
 
     // When object other leaves Collider.
-    void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
     }
 
