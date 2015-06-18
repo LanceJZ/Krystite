@@ -8,6 +8,7 @@ public class Shot : MonoBehaviour
     public GameObject explodeFX;
     public float shotLife;
     public float shotSpeed;
+    public bool fromEnemy;
 
     private float shotTimer;
     private CheckBounds checkBounds;
@@ -56,6 +57,9 @@ public class Shot : MonoBehaviour
         if (tag == "PlayerSuperShot" && other.tag == "EnemyShot")
             return;
 
+        if (tag == "PlayerSuperShot" && other.tag == "Krystite")
+            return;
+
         if (tag == "EnemyShot" && other.tag == "Enemy")
             return;
 
@@ -65,14 +69,23 @@ public class Shot : MonoBehaviour
         if (tag == "BossShot" && other.tag == "Boss")
             return;
 
+        if (other.tag == "PlayerSuperShot")
+            return;
+
+        if (other.tag == "PlayerShot")
+            return;
+
+        if (other.tag == "EnemyShot")
+            return;
+
         if (other.tag == "EnemyDetect")
             return;
 
-        GetComponent<Collider>().enabled = false;
-        Instantiate(explodeFX, transform.position, Quaternion.identity);
-
         if (gameObject != null)
+        {
+            Instantiate(explodeFX, transform.position, Quaternion.identity);
             Destroy(gameObject);
+        }
     }
 
     private void OnDestroy()

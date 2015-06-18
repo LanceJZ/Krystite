@@ -33,9 +33,9 @@ public class Player : MonoBehaviour
     private float timer;
     private float shotTimer;
     private float arrowTimer;
-    private int health;
+    public int health;
     private int shotNumber;
-    private int krystiteAmout;
+    public int krystiteAmout;
 
     // Use this for initialization when scene loads.
     private void Awake()

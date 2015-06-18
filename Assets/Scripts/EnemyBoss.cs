@@ -95,13 +95,37 @@ public class EnemyBoss : MonoBehaviour
     {
         if (other.tag == "PlayerSuperShot")
         {
-            health -= 25;
+            health -= 13;
 
             if (health <= 0)
             {
                 score.AddScore(points);
                 Instantiate(explodeFX, transform.position, Quaternion.identity);
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyController>().BoulderDestroyed();
                 Destroy(gameObject.transform.parent.gameObject);
+            }
+            else
+            {
+                transform.FindChild("Damage").GetComponent<ParticleSystem>().Play();
+                transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 10;
+
+                if (health < 87)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 26;
+
+                if (health < 74)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 52;
+
+                if (health < 61)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 66;
+
+                if (health < 48)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 100;
+
+                if (health < 35)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 113;
+
+                if (health < 22)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 126;
             }
         }
     }

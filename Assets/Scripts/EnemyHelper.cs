@@ -66,7 +66,7 @@ public class EnemyHelper : MonoBehaviour
     // Use this for initialization when game starts.
     private void Start()
     {
-        Setup(50);
+        //Setup(50);
         points = 50;
         health = 100;
     }
@@ -160,6 +160,10 @@ public class EnemyHelper : MonoBehaviour
 
         if (attackPlayer)
         {
+            maxSpeed = 1;
+            GetComponentInChildren<ParticleSystem>().Play();
+            GetComponent<Rigidbody>().drag = 0.25f;
+
             if (targetPlayer != null)
                 GetTarget(targetPlayer.position);
             else
@@ -257,14 +261,30 @@ public class EnemyHelper : MonoBehaviour
 
                 Destroy(gameObject.transform.parent.gameObject);
             }
+            else
+            {
+                transform.FindChild("Damage").GetComponent<ParticleSystem>().Play();
+                transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 25;
+
+                if (health < 75)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 50;
+                else if (health < 50)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 100;
+                else if (health < 25)
+                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 125;
+            }
         }
 
         if (other.tag == "BossBuilder")
         {
-            other.GetComponent<EnemyBossBuilder>().RecieveKrystite(10);
-            krystite -= 10;
-            krystiteFull = false;
-            findRock = true;
+            if (krystite > 0)
+            {
+                int krystiteAmount = krystite;
+                other.GetComponent<EnemyBossBuilder>().RecieveKrystite(krystiteAmount);
+                krystite -= krystiteAmount;
+                krystiteFull = false;
+                findRock = true;
+            }
         }
     }
 
@@ -313,7 +333,7 @@ public class EnemyHelper : MonoBehaviour
     private void FireShot(int gun)
     {
         GameObject thisShotObj = Instantiate(shot);
-        thisShotObj.GetComponentInChildren<AudioSource>().volume = 0.005f;
+        thisShotObj.GetComponentInChildren<AudioSource>().volume = 0.01f;
         thisShotObj.GetComponentInChildren<AudioSource>().clip = shotClip;
         thisShotObj.GetComponentInChildren<AudioSource>().loop = false;
         thisShotObj.GetComponentInChildren<AudioSource>().Play();
