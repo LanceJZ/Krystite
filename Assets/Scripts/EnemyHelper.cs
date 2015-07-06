@@ -237,7 +237,7 @@ public class EnemyHelper : MonoBehaviour
 
         if (other.tag == "PlayerSuperShot")
         {
-            health -= 50;
+            health -= 25;
 
             if (health <= 0)
             {
@@ -259,6 +259,7 @@ public class EnemyHelper : MonoBehaviour
                     spawn.GetComponent<Krystite>().Setup(transform.position, other.GetComponent<Rigidbody>().velocity * 5);
                 }
 
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyController>().HelperDestroyed();
                 Destroy(gameObject.transform.parent.gameObject);
             }
             else
@@ -270,8 +271,6 @@ public class EnemyHelper : MonoBehaviour
                     transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 50;
                 else if (health < 50)
                     transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 100;
-                else if (health < 25)
-                    transform.FindChild("Damage").GetComponent<ParticleSystem>().emissionRate = 125;
             }
         }
 
@@ -375,33 +374,6 @@ public class EnemyHelper : MonoBehaviour
             findRock = true;
 
         attackPlayer = false;
-    }
-
-    public void Setup(int Points)
-    {
-        Vector3 position = Vector3.zero;
-        points = Points;
-
-        if (Random.Range(0, 10) > 5)
-        {
-            position.x = Random.Range(-checkBounds.screenBounds.x, -checkBounds.gameBounds.x);
-        }
-        else
-        {
-            position.x = Random.Range(checkBounds.screenBounds.x, checkBounds.gameBounds.x);
-        }
-
-        if (Random.Range(0, 10) > 5)
-        {
-            position.y = Random.Range(-checkBounds.screenBounds.y, -checkBounds.gameBounds.y);
-        }
-        else
-        {
-            position.y = Random.Range(checkBounds.screenBounds.y, checkBounds.gameBounds.y);
-        }
-
-        transform.position = position;
-        spawnPosition = position;
     }
 
     public void SetKrystite(EnemyKrystiteDetect KrystiteDetectscript)

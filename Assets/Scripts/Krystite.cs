@@ -11,7 +11,7 @@ public class Krystite : MonoBehaviour
     private void Awake()
     {
         checkBounds = new CheckBounds(GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(),
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>(), 52);
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>(), 52);
     }
 
     // Use this for initialization when game starts.
@@ -51,9 +51,8 @@ public class Krystite : MonoBehaviour
     public void Setup(Vector3 position, Vector3 velocity)
     {
         transform.position = position;
-        velocity.x += Random.Range(-25, 25);
-        velocity.y += Random.Range(-25, 25);
+        velocity.x += Random.Range(-50, 50);
+        velocity.y += Random.Range(-50, 50);
         GetComponent<Rigidbody>().AddRelativeForce(velocity);
-        GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * 1;
     }
 }

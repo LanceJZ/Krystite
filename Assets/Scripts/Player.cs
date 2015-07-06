@@ -277,13 +277,13 @@ public class Player : MonoBehaviour
             return;
 
         if (other.tag == "Rock")
-            ShipHit(5);
+            ShipHit(1);
 
         if (other.tag == "EnemyShot")
-            ShipHit(10);
+            ShipHit(3);
 
         if (other.tag == "Enemy")
-            ShipHit(20);
+            ShipHit(1);
 
         if (other.tag == "Krystite")
         {

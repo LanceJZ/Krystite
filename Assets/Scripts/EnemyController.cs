@@ -14,12 +14,13 @@ public class EnemyController : MonoBehaviour
 
     private void Awake()
     {
-        spawnDelay = 45;
+        spawnDelay = 240;
     }
 
     private void Start()
     {
-        SpawnBoulder();
+        for (int i = 0; i < 2; i++)
+            SpawnBoulder();
     }
 
     // Update is called once per frame
@@ -27,16 +28,26 @@ public class EnemyController : MonoBehaviour
     {
         if (spawnTimer < Time.time)
         {
-            int boss = 0;
-            GameObject[] bossBuilders = GameObject.FindGameObjectsWithTag("BossBuilder");
-
-            if (bossBuilders.Length > 1)
-                boss = Random.Range(0, bossBuilders.Length);
-
-            Transform spawnTransform = bossBuilders[boss].GetComponent<Transform>();
-            Instantiate(helper, spawnTransform.position, spawnTransform.rotation);
-            spawnTimer = Time.time + spawnDelay;
+            SpawnHelper();
+            SpawnTimerReset();
         }
+    }
+
+    private void SpawnTimerReset()
+    {
+        spawnTimer = Time.time + spawnDelay;
+    }
+
+    private void SpawnHelper()
+    {
+        int boss = 0;
+        GameObject[] bossBuilders = GameObject.FindGameObjectsWithTag("BossBuilder");
+
+        if (bossBuilders.Length > 1)
+            boss = Random.Range(0, bossBuilders.Length);
+
+        Transform spawnTransform = bossBuilders[boss].GetComponent<Transform>();
+        Instantiate(helper, spawnTransform.position, spawnTransform.rotation);
     }
 
     private void SpawnBoulder()
@@ -47,5 +58,15 @@ public class EnemyController : MonoBehaviour
     public void BoulderDestroyed()
     {
         SpawnBoulder();
+    }
+
+    public void HelperDestroyed()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            SpawnHelper();
+        }
+
+        SpawnTimerReset();
     }
 }

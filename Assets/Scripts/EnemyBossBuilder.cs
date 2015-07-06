@@ -18,6 +18,7 @@ public class EnemyBossBuilder : MonoBehaviour
     // Use this for initialization when scene loads.
     private void Awake()
     {
+        score = GameObject.FindGameObjectWithTag("GameController").GetComponent<Score>(); //Give score to player when player hits.
         checkBounds = new CheckBounds(GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(),
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>(), 51);
 
@@ -30,21 +31,21 @@ public class EnemyBossBuilder : MonoBehaviour
     {
         // random location
         if (Random.Range(0, 10) > 5)
-            transform.position = new Vector3(Random.Range(-checkBounds.gameBounds.x * 0.25f, -checkBounds.gameBounds.x * 0.85f),
-                Random.Range(-checkBounds.gameBounds.y * 0.75f, -checkBounds.gameBounds.y * 0.85f), 0);
+            transform.position = new Vector3(Random.Range(-checkBounds.gameBounds.x * 0.25f, -checkBounds.gameBounds.x * 0.95f),
+                Random.Range(-checkBounds.gameBounds.y * 0.95f, -checkBounds.gameBounds.y * 0.99f), 0);
         else
-            transform.position = new Vector3(Random.Range(checkBounds.gameBounds.x * 0.25f, checkBounds.gameBounds.x * 0.85f),
-                Random.Range(-checkBounds.gameBounds.y * 0.75f, -checkBounds.gameBounds.y * 0.85f), 0);
+            transform.position = new Vector3(Random.Range(checkBounds.gameBounds.x * 0.25f, checkBounds.gameBounds.x * 0.95f),
+                Random.Range(-checkBounds.gameBounds.y * 0.95f, -checkBounds.gameBounds.y * 0.99f), 0);
     }
 
     // Update is called once per frame.
     private void Update()
     {
-        if (krystite >= 20)
+        if (krystite >= 30)
         {
-            Instantiate(BossObj, transform.position, transform.rotation);
-
-            krystite -= 20;
+            EnemyBoss spawn = Instantiate(BossObj).GetComponent<EnemyBoss>();
+            spawn.Setup(krystite, transform.position);
+            krystite -= 30;
         }
     }
 
@@ -58,19 +59,20 @@ public class EnemyBossBuilder : MonoBehaviour
     {
         if (other.tag == "PlayerSuperShot")
         {
-            health -= 5;
+            health -= 10;
 
             if (health <= 0)
             {
                 score.AddScore(points);
+                Instantiate(explodeFX, transform.position, Quaternion.identity);
 
                 for (int i = 0; i < krystite; i++)
                 {
                     GameObject spawn = Instantiate(krystiteObj); //Have the Krystite go the direction of the shot.
-                    spawn.GetComponent<Krystite>().Setup(transform.position, other.GetComponent<Rigidbody>().velocity * 5);
+                    spawn.GetComponent<Krystite>().Setup(transform.position, other.GetComponent<Rigidbody>().velocity);
                 }
 
-                Instantiate(explodeFX, transform.position, Quaternion.identity);
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyController>().BoulderDestroyed();
                 Destroy(gameObject.transform.parent.gameObject);
             }
             else

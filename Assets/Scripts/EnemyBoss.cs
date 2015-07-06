@@ -6,8 +6,9 @@ public class EnemyBoss : MonoBehaviour
     // Use this for class variables.
 
     public GameObject superShotObj;
-    public AudioClip shotClip;
+    public GameObject krystiteObj;
     public GameObject explodeFX;
+    public AudioClip shotClip;
     public int krystite;
     public int health;
 
@@ -101,6 +102,13 @@ public class EnemyBoss : MonoBehaviour
             {
                 score.AddScore(points);
                 Instantiate(explodeFX, transform.position, Quaternion.identity);
+
+                for (int i = 0; i < krystite; i++)
+                {
+                    GameObject spawn = Instantiate(krystiteObj); //Have the Krystite go the direction of the shot.
+                    spawn.GetComponent<Krystite>().Setup(transform.position, other.GetComponent<Rigidbody>().velocity * 5);
+                }
+
                 GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyController>().BoulderDestroyed();
                 Destroy(gameObject.transform.parent.gameObject);
             }
@@ -133,5 +141,11 @@ public class EnemyBoss : MonoBehaviour
     // When object other leaves Collider.
     private void OnTriggerExit(Collider other)
     {
+    }
+
+    public void Setup(int Amount, Vector3 Position)
+    {
+        krystite = Amount;
+        transform.position = Position;
     }
 }
